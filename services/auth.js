@@ -1,6 +1,8 @@
 const ResponseService = require("./response");
 const modelSubscriber = require("../models/subscriber");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+
 class Auth {
   #LOGGED_MESSAGE_STRING = "Login efetuado com sucesso.";
   #EMAIL_KEY_STRING = "email";
@@ -19,7 +21,7 @@ class Auth {
       await this.#validateInputLogin();
       await this.#checkExistsSubscriber();
       await this.#comparePassword();
-
+      this.#subscriber.token = this.#generateToken(this.#subscriber);
       this.responseService.handleSuccess(
         this.responseService.STATUS_NAME.SUCCESS,
         this.#LOGGED_MESSAGE_STRING,
@@ -85,6 +87,9 @@ class Auth {
   }
   #hidePassword() {
     this.#subscriber.password = undefined;
+  }
+  async #generateToken(params) {
+    return jwt.sign(params, process.env.SECRET);
   }
 }
 
