@@ -7,6 +7,7 @@ class Auth {
   #LOGGED_MESSAGE_STRING = "Login efetuado com sucesso.";
   #EMAIL_KEY_STRING = "email";
   #PASSWORD_KEY_STRING = "password";
+
   #subscriber = null;
   constructor(payload, response) {
     this.response = response;
@@ -21,7 +22,8 @@ class Auth {
       await this.#validateInputLogin();
       await this.#checkExistsSubscriber();
       await this.#comparePassword();
-      this.#subscriber.token = this.#generateToken(this.#subscriber);
+      const token = await this.#generateToken(this.#subscriber);
+      this.#setSubscriber({ ...this.#subscriber, token: token });
       this.responseService.handleSuccess(
         this.responseService.STATUS_NAME.SUCCESS,
         this.#LOGGED_MESSAGE_STRING,
@@ -58,7 +60,6 @@ class Auth {
     const existSubscriber = await modelSubscriber.connectDb
       .findOne({ email: this.payload.email })
       .select(`+${this.#PASSWORD_KEY_STRING}`);
-    console.log(existSubscriber);
     if (!existSubscriber)
       throw {
         statusName: this.responseService.STATUS_NAME.CLIENT,
@@ -68,7 +69,7 @@ class Auth {
           this.#EMAIL_KEY_STRING
         ),
       };
-    this.#setSubscriber(existSubscriber);
+    this.#setSubscriber(existSubscriber._doc);
   }
   async #comparePassword() {
     if (!bcrypt.compareSync(this.payload.password, this.#subscriber.password))
