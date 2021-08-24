@@ -25,7 +25,7 @@ class Subscriber {
       await this.#checkSubscriberExists();
 
       this.subscriber.password = await this.#encryptPassword();
-
+      this.subscriber.email = this.subscriber.email.toLowerCase();
       const subscriberCreated = await modelSubscriber.connectDb.create(
         this.subscriber
       );
@@ -54,7 +54,7 @@ class Subscriber {
   }
 
   async #validateSubscriberDocuments() {
-    if (!utils.validateEmail(this.subscriber.email))
+    if (!utils.validateEmail(this.subscriber.email.toLowerCase()))
       throw {
         input: this.#EMAIL_KEY_STRING,
         statusName: this.responseService.STATUS_NAME.CLIENT,
@@ -112,7 +112,7 @@ class Subscriber {
   async #checkEmailExists() {
     console.log(this.subscriber.email);
     const existEmail = await modelSubscriber.connectDb.findOne({
-      email: this.subscriber.email,
+      email: this.subscriber.email.toLowerCase(),
     });
     if (existEmail)
       throw {
