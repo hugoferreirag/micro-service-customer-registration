@@ -6,7 +6,7 @@ const ResponseService = require("./response");
 
 class Subscriber {
   #EMAIL_KEY_STRING = "Email";
-  #DOCUMENT_KEY_STRING = "Document";
+  #DOCUMENT_KEY_STRING = "Documento";
   #CREATED_MESSAGE_STRING = "Assinatura efetuada com sucesso!";
 
   constructor(subscriber = null, response) {
@@ -119,8 +119,7 @@ class Subscriber {
         input: this.#EMAIL_KEY_STRING,
         statusName: this.responseService.STATUS_NAME.CLIENT,
         message: this.responseService.mountErrorMessageForRegisterExistsInDb(
-          this.#EMAIL_KEY_STRING,
-          this.subscriber.email
+          this.#EMAIL_KEY_STRING
         ),
       };
   }
@@ -134,8 +133,7 @@ class Subscriber {
         input: this.#DOCUMENT_KEY_STRING,
         statusName: this.responseService.STATUS_NAME.CLIENT,
         message: this.responseService.mountErrorMessageForRegisterExistsInDb(
-          this.#DOCUMENT_KEY_STRING,
-          this.subscriber.document
+          this.#DOCUMENT_KEY_STRING
         ),
       };
   }

@@ -91,8 +91,8 @@ class ResponseService {
   mountErrorMessageForIrregularKey(key) {
     return `Dados recebidos inválidos, campo '${key}', não existe, é nulo ou está descrito de forma incorreta`;
   }
-  mountErrorMessageForRegisterExistsInDb(key, value) {
-    return `${key}: '${value}' ja está cadastrado no banco de dados.`;
+  mountErrorMessageForRegisterExistsInDb(key) {
+    return `${key} ja está em uso !`;
   }
 }
 
